@@ -1,0 +1,90 @@
+<h2>Templates: <small>Dinamicos</small></h2>
+<hr>
+
+<form (ngSubmit)="guardar()" 
+        #myForm="ngForm">
+    
+    <!-- Nombre -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Nombre</label>
+        <div class="col-sm-9">
+            <input type="text"
+                    class="form-control"
+                    [ngModel]="person.name"
+                    placeholder="Nombre de la persona"
+                    name="name"
+                    required>
+                    
+            <span class="form-text text-danger" 
+                *ngIf=" myForm.controls.name?.errors &&
+                        myForm.controls.name?.touched">
+                Este campo es obligatorio
+            </span>
+        </div>
+    </div>
+
+
+    <!-- Agregar -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Agregar</label>
+        <div class="col-sm-9">
+            
+            <div class="input-group">
+                <input type="text"
+                        class="form-control"
+                        placeholder="Agregar favorito"
+                        [(ngModel)]="newGame"
+                        name="newGame"
+                        (keyup.enter)="addGame()">
+                    <button class="btn btn-outline-primary"
+                            type="button"
+                            (click)="addGame()">
+                        Agregar
+                    </button>
+            </div>        
+        </div>
+    </div>
+
+
+    <!-- Lista de Juegos Favoritos -->
+    <div class="mb-3 row">
+        <label class="col-sm-3 col-form-label">Favoritos</label>
+        <div class="col-sm-9">
+
+            <div class="input-group mb-1"
+                 *ngFor="let game of person.favoritos; let i = index">
+                <input  [(ngModel)]="game.name"
+                        name="favorito_{{ i }}"
+                        type="text" class="form-control ">
+                <button class="btn btn-outline-danger"
+                        (click)="delete(i)"
+                        type="button">
+                    Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button type="submit"
+                    class="btn btn-primary float-end"
+                    (click)="guardar()"
+                    [disabled]="!myForm.valid">
+                Guardar
+            </button>    
+        </div>
+    </div>
+</form>
+
+<div class="row">
+    <div class="col">
+
+        <span>Valid</span>
+        <pre> {{ myForm.valid }}</pre>
+
+    </div>
+</div>
+
+<span>Persona</span>
+<pre>{{ person | json }}</pre>
