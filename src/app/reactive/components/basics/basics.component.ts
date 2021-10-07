@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-basics',
@@ -8,9 +9,40 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BasicsComponent implements OnInit {
 
-  constructor() { }
+  // myForm: FormGroup = new FormGroup({
+  //   name: new FormControl('RTX 4080ti'),
+  //   price: new FormControl(1500),
+  //   stock: new FormControl(5)
+  // })
 
-  ngOnInit(): void {
+  myForm: FormGroup = this.fb.group({
+    name: [ , [ Validators.required, Validators.minLength(3) ] ],
+    price: [ , [ Validators.required, Validators.min(0) ] ],
+    stock: [ , [ Validators.required, Validators.min(0) ] ],
+  })
+  constructor( private fb: FormBuilder ) { }
+
+  ngOnInit(){
+    this.myForm.reset({
+      name: 'Ryzen',
+      price: 10000,
+      stock: 20
+    })
+  }
+
+  fieldHasError( field: string ){
+    return ( this.myForm.controls[field].errors && 
+              this.myForm.controls[field].touched )
+  }
+
+  save(){
+
+    if (this.myForm.invalid ){
+      this.myForm.markAllAsTouched();
+      return;
+    } 
+    console.log( this.myForm.value );
+    this.myForm.reset();
   }
 
 }
